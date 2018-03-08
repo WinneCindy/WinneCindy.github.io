@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://WinneCindy.github.io/images/retaincycle2.png">
 <meta property="og:image" content="https://WinneCindy.github.io/images/retaincycle3.png">
 <meta property="og:image" content="https://WinneCindy.github.io/images/sdwebimage.jpg">
-<meta property="og:updated_time" content="2018-03-08T02:45:43.933Z">
+<meta property="og:updated_time" content="2018-03-08T02:57:23.809Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基础">
 <meta name="twitter:description" content="什么是arc？（arc是为了解决什么问题诞生的？）Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。 当ARC开启时，编译器将自动在代码合适的地方插入retain,releas">
@@ -357,14 +357,13 @@
 <p>唯一一个能绕过晚绑定的方式，就是直接得到某个方法的地址，然后像调用函数一样调用它。NSObject中有一个方法<code>methodForSelector:</code>，它可以直接返回对应方法的函数指针。</p>
 <p>注意，在调用这个函数指针的时候，也需要传递receiver和selector的这两个隐藏参数</p>
 <h2 id="什么是method-swizzling"><a href="#什么是method-swizzling" class="headerlink" title="什么是method swizzling?"></a>什么是method swizzling?</h2><p>其实跟字面的意思很相近。方法的调和。可以去修改oc中两个方法的调用。就是把两个实现调换</p>
-<figure class="highlight plain"><figcaption><span>ori_Method </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Method my_Method = class_getInstanceMethod([MYclass class], @selector(myLastObject));</span><br><span class="line"></span><br><span class="line">method_exchangeImplementations(ori_Method, my_Method);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Method ori_Method =  class_getInstanceMethod([MYclass class], @selector(lastObject));</span><br><span class="line"></span><br><span class="line">Method my_Method = class_getInstanceMethod([MYclass class], @selector(myLastObject));</span><br><span class="line"></span><br><span class="line">method_exchangeImplementations(ori_Method, my_Method);</span><br></pre></td></tr></table></figure>
 <h3 id="UIView和CALayer是啥关系"><a href="#UIView和CALayer是啥关系" class="headerlink" title="UIView和CALayer是啥关系"></a>UIView和CALayer是啥关系</h3><ol>
-<li>首先UIView可以响应事件，Layer不可以.</li>
-</ol>
-<p>UIKit使用UIResponder作为响应对象，来响应系统传递过来的事件并进行处理。在 UIResponder中定义了处理各种事件和事件传递的接口。</p>
-<p>UIApplication、UIViewController、UIView、和所有从UIView派生出来的UIKit类（包括UIWindow）都直接或间接地继承自UIResponder类。</p>
-<p>CALayer直接继承 NSObject，并没有相应的处理事件的接口。</p>
-<ol>
+<li><p>首先UIView可以响应事件，Layer不可以.</p>
+<p> UIKit使用UIResponder作为响应对象，来响应系统传递过来的事件并进行处理。在 UIResponder中定义了处理各种事件和事件传递的接口。</p>
+<p> UIApplication、UIViewController、UIView、和所有从UIView派生出来的UIKit类（包括UIWindow）都直接或间接地继承自UIResponder类。</p>
+<p> CALayer直接继承 NSObject，并没有相应的处理事件的接口。</p>
+</li>
 <li><p>UIView是CALayer的delegate</p>
 </li>
 <li><p>UIView主要处理事件，CALayer负责绘制就更好</p>
@@ -383,6 +382,36 @@
 <p>这个方法的调用机制也是非常特别. 当你调用 setNeedsDisplay 方法时, UIKit 将会把当前图层标记为 dirty, 但还是会显示原来的内容, 直到下一次的视图渲染周期, 才会为标记为 dirty 的图层重新建立 Core Graphics 上下文, 然后将内存中的数据恢复出来, 再使用 CGContextRef 进行绘制.</p>
 <h2 id="ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"><a href="#ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）" class="headerlink" title="ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"></a>ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）</h2><p>首先判断url中的图片是否在imagecache中存在，如果存在的话，直接显示在tableviewcell上，如果不存在，就会去寻找沙盒中是否存在，如果沙盒中存在，那么会将沙盒中url信息缓存到imagecache中，接着显示到tableviewcell，如果不存在，显示占位图，然后查看是否url图片信息已经存在operacache中进行下载，如果不是，生成一个operacache下载进程，下载完成之后，移除下载进程，将图片加入imagecache中，显示在tableviewcell中。清晰的思路如图：</p>
 <p>SDWebimage:<br><img src="https://WinneCindy.github.io/images/sdwebimage.jpg" alt="SDWebImage"></p>
+<h2 id="用Instrument优化动画性能"><a href="#用Instrument优化动画性能" class="headerlink" title="用Instrument优化动画性能"></a>用Instrument优化动画性能</h2><p>优化的话，基础的的，reuse大家都知道，然后把opaque都设置为yes(有个选项可以显示那些为false的UIView)，然后把cornerRadius和shadow（主要是shadow）优化，不要用代码写。然后不要在delegate方法里使用类似 tableview.cellForIndexpath 还是 indexpathForCell 类似的方法 。</p>
+<p>要求高一点，就尽可能缓存和预加载。而且不在delegate里减少需要计算的东西，和占内存的东西。在后台进程先把layer的image绘制好，然后缓存起来要显示的时候再加载。</p>
+<h2 id="loadView是干嘛用的"><a href="#loadView是干嘛用的" class="headerlink" title="loadView是干嘛用的"></a>loadView是干嘛用的</h2><p>viewController的方法，会在viewDidLoad之前进行调用。</p>
+<p>很多人都会疑惑self.view,这个view道理是哪里来的，就是在这里。一般不需要去操作这个。但如果有特殊的需求，要求这个self.view是我们自己自定义的view时候就可以用这个方法，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyView *myview = [[MyView alloc]init];</span><br><span class="line"></span><br><span class="line">self.view = myview;</span><br></pre></td></tr></table></figure></p>
+<h2 id="viewWillLayoutSubView是什么"><a href="#viewWillLayoutSubView是什么" class="headerlink" title="viewWillLayoutSubView是什么"></a>viewWillLayoutSubView是什么</h2><p>当viewController的bounds又改变，调用这个方法来实现subview的位置。可重写这个方法来实现父视图变化subview跟着变化</p>
+<h2 id="GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？"><a href="#GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？" class="headerlink" title="GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？"></a>GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？</h2><p><a href="http://www.cnblogs.com/ioshe/p/5937933.html" target="_blank" rel="noopener">gcd详解</a></p>
+<h2 id="用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的"><a href="#用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的" class="headerlink" title="用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的"></a>用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的</h2><p>最好是在同一个线程里面，比价方便。如果要分线程的话要注意：</p>
+<p>1、只用一个NSPersistentStoreCoordinator</p>
+<p>2、每个线程创建一个NSManagedObjectContext</p>
+<p>3、不要传递NSManagedObject，传objectID，通过fetch获得。</p>
+<p>4、先存后取，利用<code>NSManagedObjectContext</code><br>-mergeChangesFromContextDidSaveNotification:</p>
+<p>解决死锁的方法：<a href="http://www.cnblogs.com/Jessy/p/3540724.html" target="_blank" rel="noopener">参考链接</a></p>
+<h2 id="http的post和get啥区别"><a href="#http的post和get啥区别" class="headerlink" title="http的post和get啥区别"></a>http的post和get啥区别</h2><h3 id="原理的区别"><a href="#原理的区别" class="headerlink" title="原理的区别"></a>原理的区别</h3><p>一般我们在浏览器输入一个网址访问网站都是GET请求;再FORM表单中，可以通过设置Method指定提交方式为GET或者POST提交方式，默认为GET提交方式。</p>
+<p>HTTP定义了与服务器交互的不同方法，其中最基本的四种：GET，POST，PUT，DELETE，HEAD，其中GET和HEAD被称为安全方法，因为使用GET和HEAD的HTTP请求不会产生什么动作。不会产生动作意味着GET和HEAD的HTTP请求不会在服务器上产生任何结果。但是安全方法并不是什么动作都不产生，这里的安全方法仅仅指不会修改信息。</p>
+<p>根据HTTP规范，POST可能会修改服务器上的资源的请求。比如CSDN的博客，用户提交一篇文章或者一个读者提交评论是通过POST请求来实现的，因为再提交文章或者评论提交后资源（即某个页面）不同了，或者说资源被修改了，这些便是“不安全方法”。</p>
+<h3 id="两种请求方式的区别："><a href="#两种请求方式的区别：" class="headerlink" title="两种请求方式的区别："></a>两种请求方式的区别：</h3><ol>
+<li><p>GET请求，请求的数据会附加在URL之后，以?分割URL和传输数据，多个参数用&amp;连接。URL的编码格式采用的是ASCII编码，而不是uniclde，即是说所有的非ASCII字符都要编码之后再传输。</p>
+<p> POST请求：POST请求会把请求的数据放置在HTTP请求包的包体中。上面的item=bandsaw就是实际的传输数据。</p>
+<p> 因此，GET请求的数据会暴露在地址栏中，而POST请求则不会。</p>
+</li>
+<li><p>传输数据的大小</p>
+<p> 在HTTP规范中，没有对URL的长度和传输的数据大小进行限制。但是在实际开发过程中，对于GET，特定的浏览器和服务器对URL的长度有限制。因此，在使用GET请求时，传输数据会受到URL长度的限制。</p>
+<p> 对于POST，由于不是URL传值，理论上是不会受限制的，但是实际上各个服务器会规定对POST提交数据大小进行限制，Apache、IIS都有各自的配置。</p>
+</li>
+<li><p>安全性</p>
+<p> POST的安全性比GET的高。这里的安全是指真正的安全，而不同于上面GET提到的安全方法中的安全，上面提到的安全仅仅是不修改服务器的数据。比如，在进行登录操作，通过GET请求，用户名和密码都会暴露再URL上，因为登录页面有可能被浏览器缓存以及其他人查看浏览器的历史记录的原因，此时的用户名和密码就很容易被他人拿到了。除此之外，GET请求提交的数据还可能会造成Cross-site request frogery攻击</p>
+</li>
+<li><p>HTTP中的GET，POST，SOAP协议都是在HTTP上运行的</p>
+</li>
+</ol>
 
       
     </div>
@@ -533,7 +562,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是arc？（arc是为了解决什么问题诞生的？）"><span class="nav-number">1.</span> <span class="nav-text">什么是arc？（arc是为了解决什么问题诞生的？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请解释以下keywords的区别：assign-vs-weak-block-vs-weak"><span class="nav-number">2.</span> <span class="nav-text">请解释以下keywords的区别：assign vs weak, block vs weak</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block在arc和非arc下含义一样吗？"><span class="nav-number">3.</span> <span class="nav-text">__block在arc和非arc下含义一样吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用atomic一定是线程安全的吗？"><span class="nav-number">4.</span> <span class="nav-text">使用atomic一定是线程安全的吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述一个你遇到过的retain-cycle例子。"><span class="nav-number">5.</span> <span class="nav-text">描述一个你遇到过的retain cycle例子。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#void-load-void-initialize；有什么用处？"><span class="nav-number">6.</span> <span class="nav-text">+(void)load; +(void)initialize；有什么用处？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）"><span class="nav-number">7.</span> <span class="nav-text">为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是method-swizzling"><span class="nav-number">8.</span> <span class="nav-text">什么是method swizzling?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UIView和CALayer是啥关系"><span class="nav-number">8.1.</span> <span class="nav-text">UIView和CALayer是啥关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何高性能的给UIImageView加个圆角？"><span class="nav-number">9.</span> <span class="nav-text">如何高性能的给UIImageView加个圆角？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用drawRect有什么影响"><span class="nav-number">10.</span> <span class="nav-text">使用drawRect有什么影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"><span class="nav-number">11.</span> <span class="nav-text">ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是arc？（arc是为了解决什么问题诞生的？）"><span class="nav-number">1.</span> <span class="nav-text">什么是arc？（arc是为了解决什么问题诞生的？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请解释以下keywords的区别：assign-vs-weak-block-vs-weak"><span class="nav-number">2.</span> <span class="nav-text">请解释以下keywords的区别：assign vs weak, block vs weak</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block在arc和非arc下含义一样吗？"><span class="nav-number">3.</span> <span class="nav-text">__block在arc和非arc下含义一样吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用atomic一定是线程安全的吗？"><span class="nav-number">4.</span> <span class="nav-text">使用atomic一定是线程安全的吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述一个你遇到过的retain-cycle例子。"><span class="nav-number">5.</span> <span class="nav-text">描述一个你遇到过的retain cycle例子。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#void-load-void-initialize；有什么用处？"><span class="nav-number">6.</span> <span class="nav-text">+(void)load; +(void)initialize；有什么用处？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）"><span class="nav-number">7.</span> <span class="nav-text">为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是method-swizzling"><span class="nav-number">8.</span> <span class="nav-text">什么是method swizzling?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UIView和CALayer是啥关系"><span class="nav-number">8.1.</span> <span class="nav-text">UIView和CALayer是啥关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何高性能的给UIImageView加个圆角？"><span class="nav-number">9.</span> <span class="nav-text">如何高性能的给UIImageView加个圆角？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用drawRect有什么影响"><span class="nav-number">10.</span> <span class="nav-text">使用drawRect有什么影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"><span class="nav-number">11.</span> <span class="nav-text">ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用Instrument优化动画性能"><span class="nav-number">12.</span> <span class="nav-text">用Instrument优化动画性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loadView是干嘛用的"><span class="nav-number">13.</span> <span class="nav-text">loadView是干嘛用的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#viewWillLayoutSubView是什么"><span class="nav-number">14.</span> <span class="nav-text">viewWillLayoutSubView是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？"><span class="nav-number">15.</span> <span class="nav-text">GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的"><span class="nav-number">16.</span> <span class="nav-text">用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http的post和get啥区别"><span class="nav-number">17.</span> <span class="nav-text">http的post和get啥区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理的区别"><span class="nav-number">17.1.</span> <span class="nav-text">原理的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两种请求方式的区别："><span class="nav-number">17.2.</span> <span class="nav-text">两种请求方式的区别：</span></a></li></ol></li></ol></div>
             
 
           </div>
