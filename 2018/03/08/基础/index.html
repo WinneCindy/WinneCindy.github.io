@@ -79,13 +79,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Winnie&#39;blogs">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="什么是arc？（arc是为了解决什么问题诞生的？）Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。 当ARC开启时，编译器将自动在代码合适的地方插入retain,releas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基础">
+<meta property="og:url" content="http://yoursite.com/2018/03/08/基础/index.html">
 <meta property="og:site_name" content="Winnie&#39;blogs">
+<meta property="og:description" content="什么是arc？（arc是为了解决什么问题诞生的？）Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。 当ARC开启时，编译器将自动在代码合适的地方插入retain,releas">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://WinneCindy.github.io/images/avatar.jpg">
+<meta property="og:updated_time" content="2018-03-08T01:34:24.063Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Winnie&#39;blogs">
+<meta name="twitter:title" content="基础">
+<meta name="twitter:description" content="什么是arc？（arc是为了解决什么问题诞生的？）Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。 当ARC开启时，编译器将自动在代码合适的地方插入retain,releas">
+<meta name="twitter:image" content="https://WinneCindy.github.io/images/avatar.jpg">
 
 
 
@@ -115,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/08/基础/"/>
 
 
 
 
 
-  <title>Winnie'blogs</title>
+  <title>基础 | Winnie'blogs</title>
   
 
 
@@ -140,8 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,9 +219,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -246,9 +251,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/08/基础/" itemprop="url">基础</a></h1>
+          <h1 class="post-title" itemprop="name headline">基础</h1>
         
 
         <div class="post-meta">
@@ -298,9 +301,7 @@
       
 
       
-        
-          
-            <h2 id="什么是arc？（arc是为了解决什么问题诞生的？）"><a href="#什么是arc？（arc是为了解决什么问题诞生的？）" class="headerlink" title="什么是arc？（arc是为了解决什么问题诞生的？）"></a>什么是arc？（arc是为了解决什么问题诞生的？）</h2><p>Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。</p>
+        <h2 id="什么是arc？（arc是为了解决什么问题诞生的？）"><a href="#什么是arc？（arc是为了解决什么问题诞生的？）" class="headerlink" title="什么是arc？（arc是为了解决什么问题诞生的？）"></a>什么是arc？（arc是为了解决什么问题诞生的？）</h2><p>Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。</p>
 <p>当ARC开启时，编译器将自动在代码合适的地方插入retain,release和autorelease。</p>
 <p>关于效率：ARC是Objective-C编译器的特性，而不是运行时特性或者垃圾回收机制，ARC所做的只不过是在代码编译时为你自动在合适的位置插入release或autorelease，就如同之前MRC时你所做的那样。因此，至少在效率上ARC机制是不会比MRC弱的，而因为可以在最合适的地方完成引用计数的维护，以及部分优化，使用ARC甚至能比MRC取得更高的运行效率。</p>
 <p>ARC的基本规则：<em>只要某个对象被任一strong指针指向，那么它将不会被销毁。如果对象没有被任何strong指针指向，那么就将被销毁</em>。weak类型的指针也可以指向对象，但是并不会持有该对象。</p>
@@ -335,8 +336,6 @@
 <p>据说，atomic要比nonatomic慢大约20倍。一般如果条件允许，我们可以让服务器来进行加锁操作。</p>
 <h2 id="描述一个你遇到过的retain-cycle例子。"><a href="#描述一个你遇到过的retain-cycle例子。" class="headerlink" title="描述一个你遇到过的retain cycle例子。"></a>描述一个你遇到过的retain cycle例子。</h2><p>父类@class 子类，并且声明了子类对象，子类引用了父类，声明了父类对象，在Main函数中，对子类中的父类赋值，并且对父类中子类赋值。就会导致retain cycle 循环引用，详细看如下代码：<br><img src="https://WinneCindy.github.io/images/avatar.jpg" alt="retaincycle"></p>
 
-          
-        
       
     </div>
     
@@ -353,210 +352,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/07/hmw/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Winnie">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Winnie'blogs">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/07/hmw/" itemprop="url">内存管理思想</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-07T16:49:26+08:00">
-                2018-03-07
-              </time>
+              <a href="/2018/03/07/hmw/" rel="next" title="内存管理思想">
+                <i class="fa fa-chevron-left"></i> 内存管理思想
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h2 id="内存管理的思考方式"><a href="#内存管理的思考方式" class="headerlink" title="内存管理的思考方式"></a>内存管理的思考方式</h2><p>内存管理的思想包括以下四点：</p>
-<ol>
-<li><p>自己生成的对象，自己所持有</p>
-</li>
-<li><p>非自己生成的对象，自己也能持有</p>
-</li>
-<li><p>不再需要自己持有的对象时，要释放</p>
-</li>
-<li><p>非自己持有的对象 不能释放</p>
-</li>
-</ol>
-<h2 id="自己生成的对象自己持有"><a href="#自己生成的对象自己持有" class="headerlink" title="自己生成的对象自己持有"></a>自己生成的对象自己持有</h2><blockquote>
-<p>alloc 、new、copy、mutableCopy</p>
-</blockquote>
-<p>这些名称开头的方法名意味着自己生成的对象只有自己持有；上文中出现了一系列的自己这个词，可以将自己理解为“对象的使用环境”，也可以理解为编程人员“自身”。下面写出了自己生成并持有对象的源代码。我们在这里使用alloc方法：</p>
-<blockquote>
-<p>//自己生成对象并持有对象<br>id obj =[ [NSObject alloc] init];<br>//自己持有对象</p>
-</blockquote>
-<p>使用alloc类方法就能自己生成并持有对象。指向生成并持有对象的指针被赋给变量obj，另外，使用new类方法也可以生成并持有对象。和alloc时完全一致的</p>
-<blockquote>
-<p>//自己生成对象并持有对象<br>id obj =[NSObject new];<br>//自己持有对象</p>
-</blockquote>
-<p>copy方法利用基于NSCopying方法约定，由各类实现的copyWithZone：方法生成并持有对象副本。与copy方法类似，mutableCopy方法利用基于NSMutableCopying方法约定，由各类实现的mutableCopyWithZone：方法生成并持有对象的副本。 用这些方法生成的对象，虽然是对象的副本，但是和alloc、new一样，在”自己生成并持有对象“这点上没有发生改变；</p>
-<h2 id="非自己生成的对象，自己也能持有"><a href="#非自己生成的对象，自己也能持有" class="headerlink" title="非自己生成的对象，自己也能持有"></a>非自己生成的对象，自己也能持有</h2><p>用alloc／new／copy／mutableCopy以外的方法取得的对象，因为非自己生成并持有，所以自己不是该对象的持有者。看以下源代码：</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象的存在，但自己不持有对象</p>
-</blockquote>
-<p>上述代码中，NSmutableArray类对象被赋值给变量obj，但变量obj自己并不持有该对象。使用retain方法可以持有对象</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象的存在，但自己不持有对象<br>[obj retain];<br>//自己持有对象</p>
-</blockquote>
-<p>通过retain方法，非自己生成的对象跟用alloc／new／copy／mutableCopy方法生成并持有的对象一样，成为了自己所持有的。</p>
-<h2 id="不再需要自己持有的对象时-，要释放"><a href="#不再需要自己持有的对象时-，要释放" class="headerlink" title="不再需要自己持有的对象时 ，要释放"></a>不再需要自己持有的对象时 ，要释放</h2><p>自己持有的对象，一旦不在需要，持有者有义务释放该对象。释放使用release方法。</p>
-<blockquote>
-<p>//自己生成并持有对象<br>id obj = [[NSObject alloc] init];<br>//自己持有对象<br>[obj release];<br>//释放对象，指向 <em>对象的指针</em> 仍然被保留在变量obj中，貌似可以访问。但是 _对象_ 一经释放不可访问</p>
-</blockquote>
-<p>如此，用alloc方法由自己生成并持有的对象就通过release方法释放了。自己生成而非自己所持有的对象，若用retain方法变为自己持有，也同样可以用release方法释放。</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象存在，但自己不持有对象<br>[obj retain];<br>//自己持有对象<br>[obj release];<br>//释放对象，对象  不可再被访问</p>
-</blockquote>
-<p>那么如果要用某个方法生成对象，并将其返还给该方法的调用方，那么它应该怎么操作呢，如下：</p>
-<blockquote>
-</blockquote>
-<pre><code>-( id ) allocObject
-{
-    //自己生成并持有对象
-    id obj = [[NSObject alloc ] init ];
-    //自己持有对象
-    return obj;
-}
-</code></pre><p>如上，原封不动返回用alloc方法生成并持有的对象，就能让调用方也持有该对象。</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj1 = [obj0 allocObject];<br>//自己持有对象</p>
-</blockquote>
-<p>那么，如何像调用[NSMutableArray array] 方法使取得的对象存在，但自己不持有对象，又是如何实现的呢？如下：</p>
-<blockquote>
-</blockquote>
-<pre><code>-( id ) allocObject
-{
-    //自己生成并持有对象
-    id obj = [[NSObject alloc ] init ];
-    [obj autorelease];
-    //取得对象的存在，但是自己不持有对象。
-    return obj;
-}
-</code></pre><p>上述代码中，我使用了autorelease方法。用该方法，可以使取得的对象存在，但自己不持有对象。以后有时间我会详细介绍autorelease。</p>
-<blockquote>
-<p>id obj1 = [obj0 object];<br>//取得的对象存在，但自己不持有对象。</p>
-</blockquote>
-<p>当然也可以像前文中的NSMutableArray一样，通过retain 方法，将调用autorelease方法取得的对象变为自己持有。</p>
-<h2 id="无法释放非自己持有的对象"><a href="#无法释放非自己持有的对象" class="headerlink" title="无法释放非自己持有的对象"></a>无法释放非自己持有的对象</h2><p>对于由alloc／new／copy／mutableCopy 方法生成并持有的对象，或是retain方法持有的对象，由于持有者是自己，所以在不需要该对象的时候，需要将其释放。而由此以外所得到的对象绝对不能释放。如果在应用程序中释放了非自己所持有的对象就会造成崩溃。例如自己生成的并持有对象后，在释放完不再需要的对象之后再次释放。</p>
-<blockquote>
-<p>//自己生成并持有对象<br>id obj = [[NSObject alloc] init];<br>//自己持有对象<br>[objc release];<br>//对象已被释放<br>[obj release];<br>//释放之后再次释放已非自己持有的对象，应用程序崩溃<br>//崩溃情况：再度废弃一经废弃了的对象时崩溃   、 访问一经废弃的对象时崩溃；</p>
-</blockquote>
-<p>或者在“取得的对象存在，但自己不持有对象”时释放</p>
-<blockquote>
-<p>id obj1 = [obj0 object];<br>[obj1 release];<br>//释放了非自己持有的对象，这肯定会导致应用程序崩溃</p>
-</blockquote>
-<p>如这些例子所示，释放非自己持有的对象会造成程序崩溃。因此绝对不要去释放非自己持有的对象。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -566,129 +383,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/07/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Winnie">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/head.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Winnie'blogs">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/07/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-07T15:44:34+08:00">
-                2018-03-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -696,6 +395,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -716,8 +419,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -763,6 +475,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是arc？（arc是为了解决什么问题诞生的？）"><span class="nav-number">1.</span> <span class="nav-text">什么是arc？（arc是为了解决什么问题诞生的？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请解释以下keywords的区别：assign-vs-weak-block-vs-weak"><span class="nav-number">2.</span> <span class="nav-text">请解释以下keywords的区别：assign vs weak, block vs weak</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block在arc和非arc下含义一样吗？"><span class="nav-number">3.</span> <span class="nav-text">__block在arc和非arc下含义一样吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用atomic一定是线程安全的吗？"><span class="nav-number">4.</span> <span class="nav-text">使用atomic一定是线程安全的吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述一个你遇到过的retain-cycle例子。"><span class="nav-number">5.</span> <span class="nav-text">描述一个你遇到过的retain cycle例子。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -903,6 +631,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
