@@ -229,6 +229,140 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/08/tableview坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Winnie">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Winnie'blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/08/tableview坑/" itemprop="url">tableview坑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-08T13:18:29+08:00">
+                2018-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天公司需要实现一个功能。如下图<br><img src="https://WinneCindy.github.io/images/table.png" alt="效果图"></p>
+<p>功能是这样的，图上有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。</p>
+<p>拿到这个需求的时候一口答应了，这不是很简单的么，roload，contentofset，搞定，没毛病老铁。</p>
+<p>然后意想不到的事情出现了。我靠，这偏移量有问题啊。我FFFFF。k。这什么鬼，还有这种奇葩问题的？然后我打断点，看API，发现，contentOfSet走好几遍啊。又会重置为0。讲道理我手足无措啊。</p>
+<p>这个时候，我突然想到了一个问题，reload需要时间的吧。contentofset需要时间的吧。然后reload之后contentofset是会重置的。bingo。我觉得方向没有问题了。然后进行了如下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[UIView animateWithDuration:0.3 animations:^&#123; [tableview reloadData]; &#125; completion:^(BOOL finished)</span><br><span class="line">&#123;</span><br><span class="line">    [tableview setContentOffset:CGPointMake(0, index * Count(70))];</span><br><span class="line"></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<p>哈哈。我真的为我的机智给满分。然后运行。发现。。。我靠，为何还是有问题。这我就不理解了。然后发现还是geogle吧。找到了如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[tableview reloadData];</span><br><span class="line"></span><br><span class="line">[tableview layoutIfNeeded];</span><br><span class="line"></span><br><span class="line">[tableview setContentOffset:CGPointMake(0, index * Count(70))];</span><br></pre></td></tr></table></figure>
+<p>哈哈。这下肯定没问题了。运行。果然没有问题啊。给了测试姐姐。一会儿，测试姐姐过来说，你这个有问题诶，有时候好用的，但是多了之后，偏移有时候只偏移一半啊。你再去看看吧。有问题的啊。</p>
+<p>这下我就懵逼了。我靠，geogle也是不靠谱啊。然后我决定放弃了contentofSet这个难以掌控的APi</p>
+<p>我就想啊。我是不是可以换个思路啊，为啥一定要偏移呢。我可以滚动到相应的位置啊。然后出来了如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[tableview reloadData];</span><br><span class="line">[tableview layoutIfNeeded];</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">    [tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这下绝壁没有问题了吧。运行一看，效果不对啊 。最后一行的时候滚动不到第一行的位置啊。我靠，真的是九九八十一难啊。然后机智的我想到一个问题就是，是因为这个tableview后面没有东西了，所以滚动不到第一行了吧。然后我加了一行代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UIView *footView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, backView.frame.size.width, 200)];</span><br><span class="line">tableview.tableFooterView = footView;</span><br></pre></td></tr></table></figure>
+<p>哈哈哈。我就是如此的机智，运行。完美～</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/08/基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -810,7 +944,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
