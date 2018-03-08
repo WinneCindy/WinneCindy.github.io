@@ -333,7 +333,52 @@
 <p>比如：@property(atomic,strong)NSMutableArray *arr;</p>
 <p>如果一个线程循环的读数据，一个线程循环写数据，那么肯定会产生内存问题，因为这和setter、getter没有关系。如使用[self.arr objectAtIndex:index]就不是线程安全的。好的解决方案就是加锁。</p>
 <p>据说，atomic要比nonatomic慢大约20倍。一般如果条件允许，我们可以让服务器来进行加锁操作。</p>
-<h2 id="描述一个你遇到过的retain-cycle例子。"><a href="#描述一个你遇到过的retain-cycle例子。" class="headerlink" title="描述一个你遇到过的retain cycle例子。"></a>描述一个你遇到过的retain cycle例子。</h2><p>父类@class 子类，并且声明了子类对象，子类引用了父类，声明了父类对象，在Main函数中，对子类中的父类赋值，并且对父类中子类赋值。就会导致retain cycle 循环引用，详细看如下代码：<br><img src="https://WinneCindy.github.io/images/retaincycle1.png" alt="retaincycle"></p>
+<h2 id="描述一个你遇到过的retain-cycle例子。"><a href="#描述一个你遇到过的retain-cycle例子。" class="headerlink" title="描述一个你遇到过的retain cycle例子。"></a>描述一个你遇到过的retain cycle例子。</h2><p>父类@class 子类，并且声明了子类对象，子类引用了父类，声明了父类对象，在Main函数中，对子类中的父类赋值，并且对父类中子类赋值。就会导致retain cycle 循环引用，详细看如下代码：</p>
+<p>子类：<br><img src="https://WinneCindy.github.io/images/retaincycle1.png" alt="子类"></p>
+<p>父类：<br><img src="https://WinneCindy.github.io/images/retaincycle2.png" alt="子类"></p>
+<p>main函数调用：<br><img src="https://WinneCindy.github.io/images/retaincycle3.png" alt="子类"></p>
+<p>这样，引用循环就形成了，造成的结果就是，子对象对父对象的引用无法再取得，导致两个对象被隐式引用，最后两个test实例的引用计数都是1，最后无法释放。</p>
+<h2 id="void-load-void-initialize；有什么用处？"><a href="#void-load-void-initialize；有什么用处？" class="headerlink" title="+(void)load; +(void)initialize；有什么用处？"></a>+(void)load; +(void)initialize；有什么用处？</h2><ul>
+<li>initialize和+ load是 NSObject 类的两个类方法，它们会在运行时自动调用，我们可以利用其特性做一些初始化操作。</li>
+</ul>
+<p>initialize和load的区别在于：load是只要类所在文件被引用就会被调用，而initialize是在类或者其子类的第一个方法被调用前调用。所以如果类没有被引用进项目，就不会有load调用；但即使类文件被引用进来，但是没有使用，那么initialize也不会被调用。详情信息</p>
+<h2 id="为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）"><a href="#为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）" class="headerlink" title="为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）"></a>为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）</h2><p>在OC中，消息是直到运行时才被绑定在方法实现上的。在编译的过程中，编译器会把一个消息表达式转换成对<code>objc_msgSend</code>方法的调用。<code>objc_msgSend</code>方法会以接收消息的对象（receiver）和消息的方法名（selector）作为两个主要的参数，再加上消息本身带有的参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[receiver message];</span><br></pre></td></tr></table></figure></p>
+<p>会被转化成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objc_msgSend(receiver, selector);</span><br></pre></td></tr></table></figure></p>
+<p>当程序运行的时候，运行时系统会根据传入<code>objc_msgSend</code>方法的<code>receiver</code>和<code>selector</code>来查找应该被执行的过程。也就是说，具体哪段代码被执行是由<code>receiver</code>和<code>selector</code>这两者共同决定的。</p>
+<p>那么怎么根据<code>receiver</code>和<code>selector</code>来查找对应的过程呢？</p>
+<p>发送消息的关键就是，编译器给每个类和每个对象都构建了一个结构。每个类的结构都包含了一个指向自己父类的指针，和一个分发表。分发表中存放着这个类的每个<code>selector</code>和这个<code>selector</code>对应的过程的入口。</p>
+<p>而当一个继承自<code>NSObject</code>或<code>NSProxy</code>的对象被创建的时候，在对象的变量中，还有一个指向它对应的类结构的指针，这个指针叫做isa。所以，当得知receiver时，<code>objc_msgSend</code>方法会通过receiver的isa指针找到它对应的类的结构，并查找这个类的分发表中是否有需要的selector。如果没有找到，则沿着指向父类的指针，去父类的分发表中查找。</p>
+<p>为了加速这个过程，运行时系统会为每个类缓存selector和对应的方法的地址。每个类都有一个这样的cache，其中存放的不仅有它本身的方法，还有它继承的方法。</p>
+<p>如果<code>objc_msgSend</code>方法找到了这个过程，它会调用这个过程，并且传递所有的参数以及两个隐藏参数：receiver和selector。正是因为传递了这两个隐藏参数，程序员才能在OC源代码中使用self和_cmd。</p>
+<p>唯一一个能绕过晚绑定的方式，就是直接得到某个方法的地址，然后像调用函数一样调用它。NSObject中有一个方法<code>methodForSelector:</code>，它可以直接返回对应方法的函数指针。</p>
+<p>注意，在调用这个函数指针的时候，也需要传递receiver和selector的这两个隐藏参数</p>
+<h2 id="什么是method-swizzling"><a href="#什么是method-swizzling" class="headerlink" title="什么是method swizzling?"></a>什么是method swizzling?</h2><p>其实跟字面的意思很相近。方法的调和。可以去修改oc中两个方法的调用。就是把两个实现调换</p>
+<figure class="highlight plain"><figcaption><span>ori_Method </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Method my_Method = class_getInstanceMethod([MYclass class], @selector(myLastObject));</span><br><span class="line"></span><br><span class="line">method_exchangeImplementations(ori_Method, my_Method);</span><br></pre></td></tr></table></figure>
+<h3 id="UIView和CALayer是啥关系"><a href="#UIView和CALayer是啥关系" class="headerlink" title="UIView和CALayer是啥关系"></a>UIView和CALayer是啥关系</h3><ol>
+<li>首先UIView可以响应事件，Layer不可以.</li>
+</ol>
+<p>UIKit使用UIResponder作为响应对象，来响应系统传递过来的事件并进行处理。在 UIResponder中定义了处理各种事件和事件传递的接口。</p>
+<p>UIApplication、UIViewController、UIView、和所有从UIView派生出来的UIKit类（包括UIWindow）都直接或间接地继承自UIResponder类。</p>
+<p>CALayer直接继承 NSObject，并没有相应的处理事件的接口。</p>
+<ol>
+<li><p>UIView是CALayer的delegate</p>
+</li>
+<li><p>UIView主要处理事件，CALayer负责绘制就更好</p>
+</li>
+<li><p>每个 UIView 内部都有一个 CALayer 在背后提供内容的绘制和显示，并且 UIView 的尺寸样式都由内部的 Layer 所提供。两者都有树状层级结构，layer 内部有 SubLayers，View 内部有 SubViews.但是 Layer 比 View 多了个AnchorPoint</p>
+</li>
+</ol>
+<h2 id="如何高性能的给UIImageView加个圆角？"><a href="#如何高性能的给UIImageView加个圆角？" class="headerlink" title="如何高性能的给UIImageView加个圆角？"></a>如何高性能的给UIImageView加个圆角？</h2><p>使用Quartz2D直接绘制图片</p>
+<p>步骤：</p>
+<p>a、创建目标大小(cropWidth，cropHeight)的画布。</p>
+<p>b、使用UIImage的drawInRect方法进行绘制的时候，指定rect为(-x，-y，width，height)。</p>
+<p>c、从画布中得到裁剪后的图像。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (UIImage*)cropImageWithRect:(CGRect)cropRect</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">//豆电雨</span><br><span class="line">    CGRect drawRect = CGRectMake(-cropRect.origin.x , -cropRect.origin.y, self.size.width * self.scale, self.size.height * self.scale);</span><br><span class="line"></span><br><span class="line">    UIGraphicsBeginImageContext(cropRect.size);</span><br><span class="line"></span><br><span class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</span><br><span class="line"></span><br><span class="line">    CGContextClearRect(context, CGRectMake(0, 0, cropRect.size.width, cropRect.size.height));</span><br><span class="line"></span><br><span class="line">    [self drawInRect:drawRect];</span><br><span class="line"></span><br><span class="line">    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line"></span><br><span class="line">    UIGraphicsEndImageContext();</span><br><span class="line"></span><br><span class="line">    return image;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h2 id="使用drawRect有什么影响"><a href="#使用drawRect有什么影响" class="headerlink" title="使用drawRect有什么影响"></a>使用drawRect有什么影响</h2><p>drawRect方法依赖Core Graphics框架来进行自定义的绘制，但这种方法主要的缺点就是它处理touch事件的方式：每次按钮被点击后，都会用setNeddsDisplay进行强制重绘；而且不止一次，每次单点事件触发两次执行。这样的话从性能的角度来说，对CPU和内存来说都是欠佳的。特别是如果在我们的界面上有多个这样的UIButton实例。</p>
+<p>这个方法的主要作用是根据传入的 rect 来绘制图像参见文档. 这个方法的默认实现没有做任何事情, 我们可以在这个方法中使用 Core Graphics 和 UIKit 来绘制视图的内容.</p>
+<p>这个方法的调用机制也是非常特别. 当你调用 setNeedsDisplay 方法时, UIKit 将会把当前图层标记为 dirty, 但还是会显示原来的内容, 直到下一次的视图渲染周期, 才会为标记为 dirty 的图层重新建立 Core Graphics 上下文, 然后将内存中的数据恢复出来, 再使用 CGContextRef 进行绘制.</p>
+<h2 id="ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"><a href="#ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）" class="headerlink" title="ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"></a>ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）</h2><p>首先判断url中的图片是否在imagecache中存在，如果存在的话，直接显示在tableviewcell上，如果不存在，就会去寻找沙盒中是否存在，如果沙盒中存在，那么会将沙盒中url信息缓存到imagecache中，接着显示到tableviewcell，如果不存在，显示占位图，然后查看是否url图片信息已经存在operacache中进行下载，如果不是，生成一个operacache下载进程，下载完成之后，移除下载进程，将图片加入imagecache中，显示在tableviewcell中。清晰的思路如图：</p>
+<p>SDWebimage:<br><img src="https://WinneCindy.github.io/images/sdwebimage.jpg" alt="SDWebImage"></p>
 
           
         
