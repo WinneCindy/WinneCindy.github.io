@@ -79,13 +79,16 @@
 
 
 
+<meta name="description" content="所爱隔山海，山海皆可平">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Winnie&#39;blogs">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="Winnie&#39;blogs">
+<meta property="og:description" content="所爱隔山海，山海皆可平">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Winnie&#39;blogs">
+<meta name="twitter:description" content="所爱隔山海，山海皆可平">
 
 
 
@@ -157,7 +160,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">My life and my work</p>
       
   </div>
 
@@ -299,24 +302,15 @@
 
       
         
-          
-            <p>今天公司需要实现一个功能。如下图<br><img src="https://WinneCindy.github.io/images/table.png" alt="效果图"></p>
+          <p>今天公司需要实现一个功能。如下图<br><img src="https://WinneCindy.github.io/images/table.png" alt="alt 效果图" title="效果图"></p>
 <p>功能是这样的，图上有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。</p>
-<p>拿到这个需求的时候一口答应了，这不是很简单的么，roload，contentofset，搞定，没毛病老铁。</p>
-<p>然后意想不到的事情出现了。我靠，这偏移量有问题啊。我FFFFF。k。这什么鬼，还有这种奇葩问题的？然后我打断点，看API，发现，contentOfSet走好几遍啊。又会重置为0。讲道理我手足无措啊。</p>
-<p>这个时候，我突然想到了一个问题，reload需要时间的吧。contentofset需要时间的吧。然后reload之后contentofset是会重置的。bingo。我觉得方向没有问题了。然后进行了如下操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[UIView animateWithDuration:0.3 animations:^&#123; [tableview reloadData]; &#125; completion:^(BOOL finished)</span><br><span class="line">&#123;</span><br><span class="line">    [tableview setContentOffset:CGPointMake(0, index * Count(70))];</span><br><span class="line"></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-<p>哈哈。我真的为我的机智给满分。然后运行。发现。。。我靠，为何还是有问题。这我就不理解了。然后发现还是geogle吧。找到了如下方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[tableview reloadData];</span><br><span class="line"></span><br><span class="line">[tableview layoutIfNeeded];</span><br><span class="line"></span><br><span class="line">[tableview setContentOffset:CGPointMake(0, index * Count(70))];</span><br></pre></td></tr></table></figure>
-<p>哈哈。这下肯定没问题了。运行。果然没有问题啊。给了测试姐姐。一会儿，测试姐姐过来说，你这个有问题诶，有时候好用的，但是多了之后，偏移有时候只偏移一半啊。你再去看看吧。有问题的啊。</p>
-<p>这下我就懵逼了。我靠，geogle也是不靠谱啊。然后我决定放弃了contentofSet这个难以掌控的APi</p>
-<p>我就想啊。我是不是可以换个思路啊，为啥一定要偏移呢。我可以滚动到相应的位置啊。然后出来了如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[tableview reloadData];</span><br><span class="line">[tableview layoutIfNeeded];</span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">    [tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>这下绝壁没有问题了吧。运行一看，效果不对啊 。最后一行的时候滚动不到第一行的位置啊。我靠，真的是九九八十一难啊。然后机智的我想到一个问题就是，是因为这个tableview后面没有东西了，所以滚动不到第一行了吧。然后我加了一行代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UIView *footView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, backView.frame.size.width, 200)];</span><br><span class="line">tableview.tableFooterView = footView;</span><br></pre></td></tr></table></figure>
-<p>哈哈哈。我就是如此的机智，运行。完美～</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/08/tableview坑/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -433,8 +427,7 @@
 
       
         
-          
-            <h2 id="什么是arc？（arc是为了解决什么问题诞生的？）"><a href="#什么是arc？（arc是为了解决什么问题诞生的？）" class="headerlink" title="什么是arc？（arc是为了解决什么问题诞生的？）"></a>什么是arc？（arc是为了解决什么问题诞生的？）</h2><p>Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。</p>
+          <h2 id="什么是arc？（arc是为了解决什么问题诞生的？）"><a href="#什么是arc？（arc是为了解决什么问题诞生的？）" class="headerlink" title="什么是arc？（arc是为了解决什么问题诞生的？）"></a>什么是arc？（arc是为了解决什么问题诞生的？）</h2><p>Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。</p>
 <p>当ARC开启时，编译器将自动在代码合适的地方插入retain,release和autorelease。</p>
 <p>关于效率：ARC是Objective-C编译器的特性，而不是运行时特性或者垃圾回收机制，ARC所做的只不过是在代码编译时为你自动在合适的位置插入release或autorelease，就如同之前MRC时你所做的那样。因此，至少在效率上ARC机制是不会比MRC弱的，而因为可以在最合适的地方完成引用计数的维护，以及部分优化，使用ARC甚至能比MRC取得更高的运行效率。</p>
 <p>ARC的基本规则：<em>只要某个对象被任一strong指针指向，那么它将不会被销毁。如果对象没有被任何strong指针指向，那么就将被销毁</em>。weak类型的指针也可以指向对象，但是并不会持有该对象。</p>
@@ -452,98 +445,13 @@
 </li>
 </ol>
 <p>这就是为什么需要诞生ARC的原因啦。</p>
-<h2 id="请解释以下keywords的区别：assign-vs-weak-block-vs-weak"><a href="#请解释以下keywords的区别：assign-vs-weak-block-vs-weak" class="headerlink" title="请解释以下keywords的区别：assign vs weak, block vs weak"></a>请解释以下keywords的区别：assign vs weak, <strong>block vs </strong>weak</h2><p>assign vs weak：</p>
-<p>(1).weak，表明该属性定义了一种“非拥有关系” (nonowning relationship)。为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。</p>
-<p>(2).assign也可以修饰对象，但是用assign修饰的对象在释放后，指针的地址还是存在的，也就是说指针并没有被置为nil，会造成众所周知的野指针异常。然而，assign修饰的基础数据类型(例如NSInteger等)和C数据类型(int,float,double,char)等一般分配在栈空间上，栈空间的内存会由系统自动处理，当分配的栈空间的内存没有被指针指向时就会被销毁，所以不会造成野指针异常。</p>
-<p>(3).weak比 assign多了一个功能就是当属性所指向的对象消失的时候（也就是内存引用计数为0）会自动赋值为 nil，这样再向 weak修饰的属性发送消息就不会导致野指针操作crash。</p>
-<p><strong>block vs </strong>weak：</p>
-<p>_weak__typeof(&amp;*self)weakSelf =self; 等同于</p>
-<p>__weakUIViewController*weakSelf =self;</p>
-<p>为什么不用<strong>block 是因为通过引用来访问self的实例变量 ，self被retain,block也是一个强引用，引起循环引用，用</strong>week是弱引用，当self释放时，weakSelf已经等于nil。</p>
-<h2 id="block在arc和非arc下含义一样吗？"><a href="#block在arc和非arc下含义一样吗？" class="headerlink" title="__block在arc和非arc下含义一样吗？"></a>__block在arc和非arc下含义一样吗？</h2><p>MRC下__block修饰的变量，并不改变引用计数,同时block内部并不对引入的外部对象，更改引用计数。</p>
-<p>ARC下block会被修改为<strong>NSMallocBlock</strong>,同时引用计数增加了</p>
-<h2 id="使用atomic一定是线程安全的吗？"><a href="#使用atomic一定是线程安全的吗？" class="headerlink" title="使用atomic一定是线程安全的吗？"></a>使用atomic一定是线程安全的吗？</h2><p>当使用atomic时，虽然对属性的读和写是原子性的，但是仍然可能出现线程错误：当线程A进行写操作，这时其他线程的读或者写操作会因为该操作而等待。当A线程的写操作结束后，B线程进行写操作，然后当A线程需要读操作时，却获得了在B线程中的值，这就破坏了线程安全，如果有线程C在A线程读操作前release了该属性，那么还会导致程序崩溃。所以仅仅使用atomic并不会使得线程安全，我们还要为线程添加lock来确保线程的安全。</p>
-<p>也就是要注意：atomic所说的线程安全只是保证了getter和setter存取方法的线程安全，并不能保证整个对象是线程安全的。如下列所示：</p>
-<p>比如：@property(atomic,strong)NSMutableArray *arr;</p>
-<p>如果一个线程循环的读数据，一个线程循环写数据，那么肯定会产生内存问题，因为这和setter、getter没有关系。如使用[self.arr objectAtIndex:index]就不是线程安全的。好的解决方案就是加锁。</p>
-<p>据说，atomic要比nonatomic慢大约20倍。一般如果条件允许，我们可以让服务器来进行加锁操作。</p>
-<h2 id="描述一个你遇到过的retain-cycle例子。"><a href="#描述一个你遇到过的retain-cycle例子。" class="headerlink" title="描述一个你遇到过的retain cycle例子。"></a>描述一个你遇到过的retain cycle例子。</h2><p>父类@class 子类，并且声明了子类对象，子类引用了父类，声明了父类对象，在Main函数中，对子类中的父类赋值，并且对父类中子类赋值。就会导致retain cycle 循环引用，详细看如下代码：</p>
-<p>子类：<br><img src="https://WinneCindy.github.io/images/retaincycle1.png" alt="子类"></p>
-<p>父类：<br><img src="https://WinneCindy.github.io/images/retaincycle2.png" alt="子类"></p>
-<p>main函数调用：<br><img src="https://WinneCindy.github.io/images/retaincycle3.png" alt="子类"></p>
-<p>这样，引用循环就形成了，造成的结果就是，子对象对父对象的引用无法再取得，导致两个对象被隐式引用，最后两个test实例的引用计数都是1，最后无法释放。</p>
-<h2 id="void-load-void-initialize；有什么用处？"><a href="#void-load-void-initialize；有什么用处？" class="headerlink" title="+(void)load; +(void)initialize；有什么用处？"></a>+(void)load; +(void)initialize；有什么用处？</h2><ul>
-<li>initialize和+ load是 NSObject 类的两个类方法，它们会在运行时自动调用，我们可以利用其特性做一些初始化操作。</li>
-</ul>
-<p>initialize和load的区别在于：load是只要类所在文件被引用就会被调用，而initialize是在类或者其子类的第一个方法被调用前调用。所以如果类没有被引用进项目，就不会有load调用；但即使类文件被引用进来，但是没有使用，那么initialize也不会被调用。详情信息</p>
-<h2 id="为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）"><a href="#为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）" class="headerlink" title="为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）"></a>为什么其他语言里叫函数调用，OC里则是给对象发消息（或者谈下对runtime的理解）</h2><p>在OC中，消息是直到运行时才被绑定在方法实现上的。在编译的过程中，编译器会把一个消息表达式转换成对<code>objc_msgSend</code>方法的调用。<code>objc_msgSend</code>方法会以接收消息的对象（receiver）和消息的方法名（selector）作为两个主要的参数，再加上消息本身带有的参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[receiver message];</span><br></pre></td></tr></table></figure></p>
-<p>会被转化成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objc_msgSend(receiver, selector);</span><br></pre></td></tr></table></figure></p>
-<p>当程序运行的时候，运行时系统会根据传入<code>objc_msgSend</code>方法的<code>receiver</code>和<code>selector</code>来查找应该被执行的过程。也就是说，具体哪段代码被执行是由<code>receiver</code>和<code>selector</code>这两者共同决定的。</p>
-<p>那么怎么根据<code>receiver</code>和<code>selector</code>来查找对应的过程呢？</p>
-<p>发送消息的关键就是，编译器给每个类和每个对象都构建了一个结构。每个类的结构都包含了一个指向自己父类的指针，和一个分发表。分发表中存放着这个类的每个<code>selector</code>和这个<code>selector</code>对应的过程的入口。</p>
-<p>而当一个继承自<code>NSObject</code>或<code>NSProxy</code>的对象被创建的时候，在对象的变量中，还有一个指向它对应的类结构的指针，这个指针叫做isa。所以，当得知receiver时，<code>objc_msgSend</code>方法会通过receiver的isa指针找到它对应的类的结构，并查找这个类的分发表中是否有需要的selector。如果没有找到，则沿着指向父类的指针，去父类的分发表中查找。</p>
-<p>为了加速这个过程，运行时系统会为每个类缓存selector和对应的方法的地址。每个类都有一个这样的cache，其中存放的不仅有它本身的方法，还有它继承的方法。</p>
-<p>如果<code>objc_msgSend</code>方法找到了这个过程，它会调用这个过程，并且传递所有的参数以及两个隐藏参数：receiver和selector。正是因为传递了这两个隐藏参数，程序员才能在OC源代码中使用self和_cmd。</p>
-<p>唯一一个能绕过晚绑定的方式，就是直接得到某个方法的地址，然后像调用函数一样调用它。NSObject中有一个方法<code>methodForSelector:</code>，它可以直接返回对应方法的函数指针。</p>
-<p>注意，在调用这个函数指针的时候，也需要传递receiver和selector的这两个隐藏参数</p>
-<h2 id="什么是method-swizzling"><a href="#什么是method-swizzling" class="headerlink" title="什么是method swizzling?"></a>什么是method swizzling?</h2><p>其实跟字面的意思很相近。方法的调和。可以去修改oc中两个方法的调用。就是把两个实现调换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Method ori_Method =  class_getInstanceMethod([MYclass class], @selector(lastObject));</span><br><span class="line"></span><br><span class="line">Method my_Method = class_getInstanceMethod([MYclass class], @selector(myLastObject));</span><br><span class="line"></span><br><span class="line">method_exchangeImplementations(ori_Method, my_Method);</span><br></pre></td></tr></table></figure>
-<h3 id="UIView和CALayer是啥关系"><a href="#UIView和CALayer是啥关系" class="headerlink" title="UIView和CALayer是啥关系"></a>UIView和CALayer是啥关系</h3><ol>
-<li><p>首先UIView可以响应事件，Layer不可以.</p>
-<p> UIKit使用UIResponder作为响应对象，来响应系统传递过来的事件并进行处理。在 UIResponder中定义了处理各种事件和事件传递的接口。</p>
-<p> UIApplication、UIViewController、UIView、和所有从UIView派生出来的UIKit类（包括UIWindow）都直接或间接地继承自UIResponder类。</p>
-<p> CALayer直接继承 NSObject，并没有相应的处理事件的接口。</p>
-</li>
-<li><p>UIView是CALayer的delegate</p>
-</li>
-<li><p>UIView主要处理事件，CALayer负责绘制就更好</p>
-</li>
-<li><p>每个 UIView 内部都有一个 CALayer 在背后提供内容的绘制和显示，并且 UIView 的尺寸样式都由内部的 Layer 所提供。两者都有树状层级结构，layer 内部有 SubLayers，View 内部有 SubViews.但是 Layer 比 View 多了个AnchorPoint</p>
-</li>
-</ol>
-<h2 id="如何高性能的给UIImageView加个圆角？"><a href="#如何高性能的给UIImageView加个圆角？" class="headerlink" title="如何高性能的给UIImageView加个圆角？"></a>如何高性能的给UIImageView加个圆角？</h2><p>使用Quartz2D直接绘制图片</p>
-<p>步骤：</p>
-<p>a、创建目标大小(cropWidth，cropHeight)的画布。</p>
-<p>b、使用UIImage的drawInRect方法进行绘制的时候，指定rect为(-x，-y，width，height)。</p>
-<p>c、从画布中得到裁剪后的图像。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (UIImage*)cropImageWithRect:(CGRect)cropRect</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">//豆电雨</span><br><span class="line">    CGRect drawRect = CGRectMake(-cropRect.origin.x , -cropRect.origin.y, self.size.width * self.scale, self.size.height * self.scale);</span><br><span class="line"></span><br><span class="line">    UIGraphicsBeginImageContext(cropRect.size);</span><br><span class="line"></span><br><span class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</span><br><span class="line"></span><br><span class="line">    CGContextClearRect(context, CGRectMake(0, 0, cropRect.size.width, cropRect.size.height));</span><br><span class="line"></span><br><span class="line">    [self drawInRect:drawRect];</span><br><span class="line"></span><br><span class="line">    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line"></span><br><span class="line">    UIGraphicsEndImageContext();</span><br><span class="line"></span><br><span class="line">    return image;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<h2 id="使用drawRect有什么影响"><a href="#使用drawRect有什么影响" class="headerlink" title="使用drawRect有什么影响"></a>使用drawRect有什么影响</h2><p>drawRect方法依赖Core Graphics框架来进行自定义的绘制，但这种方法主要的缺点就是它处理touch事件的方式：每次按钮被点击后，都会用setNeddsDisplay进行强制重绘；而且不止一次，每次单点事件触发两次执行。这样的话从性能的角度来说，对CPU和内存来说都是欠佳的。特别是如果在我们的界面上有多个这样的UIButton实例。</p>
-<p>这个方法的主要作用是根据传入的 rect 来绘制图像参见文档. 这个方法的默认实现没有做任何事情, 我们可以在这个方法中使用 Core Graphics 和 UIKit 来绘制视图的内容.</p>
-<p>这个方法的调用机制也是非常特别. 当你调用 setNeedsDisplay 方法时, UIKit 将会把当前图层标记为 dirty, 但还是会显示原来的内容, 直到下一次的视图渲染周期, 才会为标记为 dirty 的图层重新建立 Core Graphics 上下文, 然后将内存中的数据恢复出来, 再使用 CGContextRef 进行绘制.</p>
-<h2 id="ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"><a href="#ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）" class="headerlink" title="ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）"></a>ASIHttpRequest或者SDWebImage里面给UIImageView加载图片的逻辑是什么样的？（把UIImageView放到UITableViewCell里面问更赞）</h2><p>首先判断url中的图片是否在imagecache中存在，如果存在的话，直接显示在tableviewcell上，如果不存在，就会去寻找沙盒中是否存在，如果沙盒中存在，那么会将沙盒中url信息缓存到imagecache中，接着显示到tableviewcell，如果不存在，显示占位图，然后查看是否url图片信息已经存在operacache中进行下载，如果不是，生成一个operacache下载进程，下载完成之后，移除下载进程，将图片加入imagecache中，显示在tableviewcell中。清晰的思路如图：</p>
-<p>SDWebimage:<br><img src="https://WinneCindy.github.io/images/sdwebimage.jpg" alt="SDWebImage"></p>
-<h2 id="用Instrument优化动画性能"><a href="#用Instrument优化动画性能" class="headerlink" title="用Instrument优化动画性能"></a>用Instrument优化动画性能</h2><p>优化的话，基础的的，reuse大家都知道，然后把opaque都设置为yes(有个选项可以显示那些为false的UIView)，然后把cornerRadius和shadow（主要是shadow）优化，不要用代码写。然后不要在delegate方法里使用类似 tableview.cellForIndexpath 还是 indexpathForCell 类似的方法 。</p>
-<p>要求高一点，就尽可能缓存和预加载。而且不在delegate里减少需要计算的东西，和占内存的东西。在后台进程先把layer的image绘制好，然后缓存起来要显示的时候再加载。</p>
-<h2 id="loadView是干嘛用的"><a href="#loadView是干嘛用的" class="headerlink" title="loadView是干嘛用的"></a>loadView是干嘛用的</h2><p>viewController的方法，会在viewDidLoad之前进行调用。</p>
-<p>很多人都会疑惑self.view,这个view道理是哪里来的，就是在这里。一般不需要去操作这个。但如果有特殊的需求，要求这个self.view是我们自己自定义的view时候就可以用这个方法，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyView *myview = [[MyView alloc]init];</span><br><span class="line"></span><br><span class="line">self.view = myview;</span><br></pre></td></tr></table></figure></p>
-<h2 id="viewWillLayoutSubView是什么"><a href="#viewWillLayoutSubView是什么" class="headerlink" title="viewWillLayoutSubView是什么"></a>viewWillLayoutSubView是什么</h2><p>当viewController的bounds又改变，调用这个方法来实现subview的位置。可重写这个方法来实现父视图变化subview跟着变化</p>
-<h2 id="GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？"><a href="#GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？" class="headerlink" title="GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？"></a>GCD里面有哪几种Queue？串行queue怎么创建？背后的线程模型是什么样的？</h2><p><a href="http://www.cnblogs.com/ioshe/p/5937933.html" target="_blank" rel="noopener">gcd详解</a></p>
-<h2 id="用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的"><a href="#用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的" class="headerlink" title="用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的"></a>用过coredata或者sqlite吗？读写是分线程的吗？遇到过死锁没？咋解决的</h2><p>最好是在同一个线程里面，比价方便。如果要分线程的话要注意：</p>
-<p>1、只用一个NSPersistentStoreCoordinator</p>
-<p>2、每个线程创建一个NSManagedObjectContext</p>
-<p>3、不要传递NSManagedObject，传objectID，通过fetch获得。</p>
-<p>4、先存后取，利用<code>NSManagedObjectContext</code><br>-mergeChangesFromContextDidSaveNotification:</p>
-<p>解决死锁的方法：<a href="http://www.cnblogs.com/Jessy/p/3540724.html" target="_blank" rel="noopener">参考链接</a></p>
-<h2 id="http的post和get啥区别"><a href="#http的post和get啥区别" class="headerlink" title="http的post和get啥区别"></a>http的post和get啥区别</h2><h3 id="原理的区别"><a href="#原理的区别" class="headerlink" title="原理的区别"></a>原理的区别</h3><p>一般我们在浏览器输入一个网址访问网站都是GET请求;再FORM表单中，可以通过设置Method指定提交方式为GET或者POST提交方式，默认为GET提交方式。</p>
-<p>HTTP定义了与服务器交互的不同方法，其中最基本的四种：GET，POST，PUT，DELETE，HEAD，其中GET和HEAD被称为安全方法，因为使用GET和HEAD的HTTP请求不会产生什么动作。不会产生动作意味着GET和HEAD的HTTP请求不会在服务器上产生任何结果。但是安全方法并不是什么动作都不产生，这里的安全方法仅仅指不会修改信息。</p>
-<p>根据HTTP规范，POST可能会修改服务器上的资源的请求。比如CSDN的博客，用户提交一篇文章或者一个读者提交评论是通过POST请求来实现的，因为再提交文章或者评论提交后资源（即某个页面）不同了，或者说资源被修改了，这些便是“不安全方法”。</p>
-<h3 id="两种请求方式的区别："><a href="#两种请求方式的区别：" class="headerlink" title="两种请求方式的区别："></a>两种请求方式的区别：</h3><ol>
-<li><p>GET请求，请求的数据会附加在URL之后，以?分割URL和传输数据，多个参数用&amp;连接。URL的编码格式采用的是ASCII编码，而不是uniclde，即是说所有的非ASCII字符都要编码之后再传输。</p>
-<p> POST请求：POST请求会把请求的数据放置在HTTP请求包的包体中。上面的item=bandsaw就是实际的传输数据。</p>
-<p> 因此，GET请求的数据会暴露在地址栏中，而POST请求则不会。</p>
-</li>
-<li><p>传输数据的大小</p>
-<p> 在HTTP规范中，没有对URL的长度和传输的数据大小进行限制。但是在实际开发过程中，对于GET，特定的浏览器和服务器对URL的长度有限制。因此，在使用GET请求时，传输数据会受到URL长度的限制。</p>
-<p> 对于POST，由于不是URL传值，理论上是不会受限制的，但是实际上各个服务器会规定对POST提交数据大小进行限制，Apache、IIS都有各自的配置。</p>
-</li>
-<li><p>安全性</p>
-<p> POST的安全性比GET的高。这里的安全是指真正的安全，而不同于上面GET提到的安全方法中的安全，上面提到的安全仅仅是不修改服务器的数据。比如，在进行登录操作，通过GET请求，用户名和密码都会暴露再URL上，因为登录页面有可能被浏览器缓存以及其他人查看浏览器的历史记录的原因，此时的用户名和密码就很容易被他人拿到了。除此之外，GET请求提交的数据还可能会造成Cross-site request frogery攻击</p>
-</li>
-<li><p>HTTP中的GET，POST，SOAP协议都是在HTTP上运行的</p>
-</li>
-</ol>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/08/基础/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -660,8 +568,7 @@
 
       
         
-          
-            <h2 id="内存管理的思考方式"><a href="#内存管理的思考方式" class="headerlink" title="内存管理的思考方式"></a>内存管理的思考方式</h2><p>内存管理的思想包括以下四点：</p>
+          <h2 id="内存管理的思考方式"><a href="#内存管理的思考方式" class="headerlink" title="内存管理的思考方式"></a>内存管理的思考方式</h2><p>内存管理的思想包括以下四点：</p>
 <ol>
 <li><p>自己生成的对象，自己所持有</p>
 </li>
@@ -684,64 +591,13 @@
 <p>//自己生成对象并持有对象<br>id obj =[NSObject new];<br>//自己持有对象</p>
 </blockquote>
 <p>copy方法利用基于NSCopying方法约定，由各类实现的copyWithZone：方法生成并持有对象副本。与copy方法类似，mutableCopy方法利用基于NSMutableCopying方法约定，由各类实现的mutableCopyWithZone：方法生成并持有对象的副本。 用这些方法生成的对象，虽然是对象的副本，但是和alloc、new一样，在”自己生成并持有对象“这点上没有发生改变；</p>
-<h2 id="非自己生成的对象，自己也能持有"><a href="#非自己生成的对象，自己也能持有" class="headerlink" title="非自己生成的对象，自己也能持有"></a>非自己生成的对象，自己也能持有</h2><p>用alloc／new／copy／mutableCopy以外的方法取得的对象，因为非自己生成并持有，所以自己不是该对象的持有者。看以下源代码：</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象的存在，但自己不持有对象</p>
-</blockquote>
-<p>上述代码中，NSmutableArray类对象被赋值给变量obj，但变量obj自己并不持有该对象。使用retain方法可以持有对象</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象的存在，但自己不持有对象<br>[obj retain];<br>//自己持有对象</p>
-</blockquote>
-<p>通过retain方法，非自己生成的对象跟用alloc／new／copy／mutableCopy方法生成并持有的对象一样，成为了自己所持有的。</p>
-<h2 id="不再需要自己持有的对象时-，要释放"><a href="#不再需要自己持有的对象时-，要释放" class="headerlink" title="不再需要自己持有的对象时 ，要释放"></a>不再需要自己持有的对象时 ，要释放</h2><p>自己持有的对象，一旦不在需要，持有者有义务释放该对象。释放使用release方法。</p>
-<blockquote>
-<p>//自己生成并持有对象<br>id obj = [[NSObject alloc] init];<br>//自己持有对象<br>[obj release];<br>//释放对象，指向 <em>对象的指针</em> 仍然被保留在变量obj中，貌似可以访问。但是 _对象_ 一经释放不可访问</p>
-</blockquote>
-<p>如此，用alloc方法由自己生成并持有的对象就通过release方法释放了。自己生成而非自己所持有的对象，若用retain方法变为自己持有，也同样可以用release方法释放。</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象存在，但自己不持有对象<br>[obj retain];<br>//自己持有对象<br>[obj release];<br>//释放对象，对象  不可再被访问</p>
-</blockquote>
-<p>那么如果要用某个方法生成对象，并将其返还给该方法的调用方，那么它应该怎么操作呢，如下：</p>
-<blockquote>
-</blockquote>
-<pre><code>-( id ) allocObject
-{
-    //自己生成并持有对象
-    id obj = [[NSObject alloc ] init ];
-    //自己持有对象
-    return obj;
-}
-</code></pre><p>如上，原封不动返回用alloc方法生成并持有的对象，就能让调用方也持有该对象。</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj1 = [obj0 allocObject];<br>//自己持有对象</p>
-</blockquote>
-<p>那么，如何像调用[NSMutableArray array] 方法使取得的对象存在，但自己不持有对象，又是如何实现的呢？如下：</p>
-<blockquote>
-</blockquote>
-<pre><code>-( id ) allocObject
-{
-    //自己生成并持有对象
-    id obj = [[NSObject alloc ] init ];
-    [obj autorelease];
-    //取得对象的存在，但是自己不持有对象。
-    return obj;
-}
-</code></pre><p>上述代码中，我使用了autorelease方法。用该方法，可以使取得的对象存在，但自己不持有对象。以后有时间我会详细介绍autorelease。</p>
-<blockquote>
-<p>id obj1 = [obj0 object];<br>//取得的对象存在，但自己不持有对象。</p>
-</blockquote>
-<p>当然也可以像前文中的NSMutableArray一样，通过retain 方法，将调用autorelease方法取得的对象变为自己持有。</p>
-<h2 id="无法释放非自己持有的对象"><a href="#无法释放非自己持有的对象" class="headerlink" title="无法释放非自己持有的对象"></a>无法释放非自己持有的对象</h2><p>对于由alloc／new／copy／mutableCopy 方法生成并持有的对象，或是retain方法持有的对象，由于持有者是自己，所以在不需要该对象的时候，需要将其释放。而由此以外所得到的对象绝对不能释放。如果在应用程序中释放了非自己所持有的对象就会造成崩溃。例如自己生成的并持有对象后，在释放完不再需要的对象之后再次释放。</p>
-<blockquote>
-<p>//自己生成并持有对象<br>id obj = [[NSObject alloc] init];<br>//自己持有对象<br>[objc release];<br>//对象已被释放<br>[obj release];<br>//释放之后再次释放已非自己持有的对象，应用程序崩溃<br>//崩溃情况：再度废弃一经废弃了的对象时崩溃   、 访问一经废弃的对象时崩溃；</p>
-</blockquote>
-<p>或者在“取得的对象存在，但自己不持有对象”时释放</p>
-<blockquote>
-<p>id obj1 = [obj0 object];<br>[obj1 release];<br>//释放了非自己持有的对象，这肯定会导致应用程序崩溃</p>
-</blockquote>
-<p>如这些例子所示，释放非自己持有的对象会造成程序崩溃。因此绝对不要去释放非自己持有的对象。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/07/hmw/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -934,7 +790,7 @@
                 alt="Winnie" />
             
               <p class="site-author-name" itemprop="name">Winnie</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">所爱隔山海，山海皆可平</p>
           </div>
 
           <nav class="site-state motion-element">
