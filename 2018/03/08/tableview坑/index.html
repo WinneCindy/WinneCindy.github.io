@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="今天公司需要实现一个功能。如下图 功能是这样的，图上有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。">
+<meta name="description" content="今天公司需要实现一个功能，是这样的，图中有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。效果图如下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="tableview坑">
 <meta property="og:url" content="http://yoursite.com/2018/03/08/tableview坑/index.html">
 <meta property="og:site_name" content="Winnie&#39;blogs">
-<meta property="og:description" content="今天公司需要实现一个功能。如下图 功能是这样的，图上有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。">
+<meta property="og:description" content="今天公司需要实现一个功能，是这样的，图中有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。效果图如下">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://WinneCindy.github.io/images/table.png">
-<meta property="og:updated_time" content="2018-03-08T06:49:56.064Z">
+<meta property="og:updated_time" content="2018-03-08T07:20:30.882Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tableview坑">
-<meta name="twitter:description" content="今天公司需要实现一个功能。如下图 功能是这样的，图上有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。">
+<meta name="twitter:description" content="今天公司需要实现一个功能，是这样的，图中有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。效果图如下">
 <meta name="twitter:image" content="https://WinneCindy.github.io/images/table.png">
 
 
@@ -301,9 +301,9 @@
       
 
       
-        <p>今天公司需要实现一个功能。如下图<br><img src="https://WinneCindy.github.io/images/table.png" alt="alt 效果图" title="效果图"></p>
-<p>功能是这样的，图上有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。</p>
+        <p>今天公司需要实现一个功能，是这样的，图中有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。效果图如下</p>
 <a id="more"></a>
+<p><img src="https://WinneCindy.github.io/images/table.png" alt="alt 效果图" title="效果图"></p>
 <p>拿到这个需求的时候一口答应了，这不是很简单的么，roload，contentofset，搞定，没毛病老铁。</p>
 <p>然后意想不到的事情出现了。我靠，这偏移量有问题啊。我FFFFF。k。这什么鬼，还有这种奇葩问题的？然后我打断点，看API，发现，contentOfSet走好几遍啊。又会重置为0。讲道理我手足无措啊。</p>
 <p>这个时候，我突然想到了一个问题，reload需要时间的吧。contentofset需要时间的吧。然后reload之后contentofset是会重置的。bingo。我觉得方向没有问题了。然后进行了如下操作：</p>

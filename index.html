@@ -302,8 +302,7 @@
 
       
         
-          <p>今天公司需要实现一个功能。如下图<br><img src="https://WinneCindy.github.io/images/table.png" alt="alt 效果图" title="效果图"></p>
-<p>功能是这样的，图上有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。</p>
+          <p>今天公司需要实现一个功能，是这样的，图中有长期，中期，短期这样的分段。然后把右侧虚线可以挪动，到哪个位置显示哪个Type，然后下面的table要跟着滑动要相应的条目，并且要滚动上来到第一行，里面的内容要加粗加黑。效果图如下</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/03/08/tableview坑/#more" rel="contents">
@@ -429,22 +428,6 @@
         
           <h2 id="什么是arc？（arc是为了解决什么问题诞生的？）"><a href="#什么是arc？（arc是为了解决什么问题诞生的？）" class="headerlink" title="什么是arc？（arc是为了解决什么问题诞生的？）"></a>什么是arc？（arc是为了解决什么问题诞生的？）</h2><p>Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。</p>
 <p>当ARC开启时，编译器将自动在代码合适的地方插入retain,release和autorelease。</p>
-<p>关于效率：ARC是Objective-C编译器的特性，而不是运行时特性或者垃圾回收机制，ARC所做的只不过是在代码编译时为你自动在合适的位置插入release或autorelease，就如同之前MRC时你所做的那样。因此，至少在效率上ARC机制是不会比MRC弱的，而因为可以在最合适的地方完成引用计数的维护，以及部分优化，使用ARC甚至能比MRC取得更高的运行效率。</p>
-<p>ARC的基本规则：<em>只要某个对象被任一strong指针指向，那么它将不会被销毁。如果对象没有被任何strong指针指向，那么就将被销毁</em>。weak类型的指针也可以指向对象，但是并不会持有该对象。</p>
-<p>使用ARC以后，不论是strong还是weak类型的指针，都不再会指向一个dealloced的对象，<em>从根源上解决了意外释放导致的crash</em>。</p>
-<p>那么是为了什么而诞生的ARC？</p>
-<p>当然是因为MRC手动管理内存的缺陷，那么MRC的缺陷有哪些呢：</p>
-<ol>
-<li><p>当我们要释放一个堆内存时，首先要确定指向这个堆空间的指针都被release了。（避免提前释放）</p>
-</li>
-<li><p>释放指针指向的堆空间，首先要确定哪些指针指向同一个堆，这些指针只能释放一次。（MRC下即谁创建，谁释放，避免重复释放）</p>
-</li>
-<li><p>模块化操作时，对象可能被多个模块创建和使用，不能确定最后由谁去释放。</p>
-</li>
-<li><p>多线程操作时，不确定哪个线程最后使用完毕</p>
-</li>
-</ol>
-<p>这就是为什么需要诞生ARC的原因啦。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/03/08/基础/#more" rel="contents">
@@ -579,18 +562,6 @@
 <li><p>非自己持有的对象 不能释放</p>
 </li>
 </ol>
-<h2 id="自己生成的对象自己持有"><a href="#自己生成的对象自己持有" class="headerlink" title="自己生成的对象自己持有"></a>自己生成的对象自己持有</h2><blockquote>
-<p>alloc 、new、copy、mutableCopy</p>
-</blockquote>
-<p>这些名称开头的方法名意味着自己生成的对象只有自己持有；上文中出现了一系列的自己这个词，可以将自己理解为“对象的使用环境”，也可以理解为编程人员“自身”。下面写出了自己生成并持有对象的源代码。我们在这里使用alloc方法：</p>
-<blockquote>
-<p>//自己生成对象并持有对象<br>id obj =[ [NSObject alloc] init];<br>//自己持有对象</p>
-</blockquote>
-<p>使用alloc类方法就能自己生成并持有对象。指向生成并持有对象的指针被赋给变量obj，另外，使用new类方法也可以生成并持有对象。和alloc时完全一致的</p>
-<blockquote>
-<p>//自己生成对象并持有对象<br>id obj =[NSObject new];<br>//自己持有对象</p>
-</blockquote>
-<p>copy方法利用基于NSCopying方法约定，由各类实现的copyWithZone：方法生成并持有对象副本。与copy方法类似，mutableCopy方法利用基于NSMutableCopying方法约定，由各类实现的mutableCopyWithZone：方法生成并持有对象的副本。 用这些方法生成的对象，虽然是对象的副本，但是和alloc、new一样，在”自己生成并持有对象“这点上没有发生改变；</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/03/07/hmw/#more" rel="contents">

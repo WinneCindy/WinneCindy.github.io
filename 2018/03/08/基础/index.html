@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://WinneCindy.github.io/images/retaincycle2.png">
 <meta property="og:image" content="https://WinneCindy.github.io/images/retaincycle3.png">
 <meta property="og:image" content="https://WinneCindy.github.io/images/sdwebimage.jpg">
-<meta property="og:updated_time" content="2018-03-08T06:51:25.258Z">
+<meta property="og:updated_time" content="2018-03-08T07:21:43.692Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基础">
 <meta name="twitter:description" content="什么是arc？（arc是为了解决什么问题诞生的？）Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。 当ARC开启时，编译器将自动在代码合适的地方插入retain,releas">
@@ -306,6 +306,7 @@
       
         <h2 id="什么是arc？（arc是为了解决什么问题诞生的？）"><a href="#什么是arc？（arc是为了解决什么问题诞生的？）" class="headerlink" title="什么是arc？（arc是为了解决什么问题诞生的？）"></a>什么是arc？（arc是为了解决什么问题诞生的？）</h2><p>Automatic Reference Counting，自动引用计数，即ARC，WWDC2011和iOS5所引入的。ARC是新的LLVM 3.0编译器的一项特性，使用ARC，解决了手动内存管理的麻烦。永远不写retain,release和autorelease三个关键字。</p>
 <p>当ARC开启时，编译器将自动在代码合适的地方插入retain,release和autorelease。</p>
+<a id="more"></a>
 <p>关于效率：ARC是Objective-C编译器的特性，而不是运行时特性或者垃圾回收机制，ARC所做的只不过是在代码编译时为你自动在合适的位置插入release或autorelease，就如同之前MRC时你所做的那样。因此，至少在效率上ARC机制是不会比MRC弱的，而因为可以在最合适的地方完成引用计数的维护，以及部分优化，使用ARC甚至能比MRC取得更高的运行效率。</p>
 <p>ARC的基本规则：<em>只要某个对象被任一strong指针指向，那么它将不会被销毁。如果对象没有被任何strong指针指向，那么就将被销毁</em>。weak类型的指针也可以指向对象，但是并不会持有该对象。</p>
 <p>使用ARC以后，不论是strong还是weak类型的指针，都不再会指向一个dealloced的对象，<em>从根源上解决了意外释放导致的crash</em>。</p>
@@ -322,7 +323,6 @@
 </li>
 </ol>
 <p>这就是为什么需要诞生ARC的原因啦。</p>
-<a id="more"></a>
 <h2 id="请解释以下keywords的区别：assign-vs-weak-block-vs-weak"><a href="#请解释以下keywords的区别：assign-vs-weak-block-vs-weak" class="headerlink" title="请解释以下keywords的区别：assign vs weak, block vs weak"></a>请解释以下keywords的区别：assign vs weak, <strong>block vs </strong>weak</h2><p>assign vs weak：</p>
 <p>(1).weak，表明该属性定义了一种“非拥有关系” (nonowning relationship)。为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。</p>
 <p>(2).assign也可以修饰对象，但是用assign修饰的对象在释放后，指针的地址还是存在的，也就是说指针并没有被置为nil，会造成众所周知的野指针异常。然而，assign修饰的基础数据类型(例如NSInteger等)和C数据类型(int,float,double,char)等一般分配在栈空间上，栈空间的内存会由系统自动处理，当分配的栈空间的内存没有被指针指向时就会被销毁，所以不会造成野指针异常。</p>
