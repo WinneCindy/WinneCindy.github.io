@@ -86,18 +86,21 @@
 
 
 
-<meta name="description" content="内存管理的思考方式内存管理的思想包括以下四点：  自己生成的对象，自己所持有  非自己生成的对象，自己也能持有  不再需要自己持有的对象时，要释放  非自己持有的对象 不能释放">
+<meta name="description" content="Flutter学习笔记昨天在同事的科普之下，我偶然间看到Flutter 这个东西，这个东西是什么呢，这个东西和RN有点像，就是可以在android和iOS跨平台的一个框架，用Dart语言写的，我喜欢这种不用XML来写的语言。">
 <meta name="keywords" content="Objective-c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="内存管理思想">
-<meta property="og:url" content="http://yoursite.com/2018/03/07/hmw/index.html">
+<meta property="og:title" content="flutter入坑">
+<meta property="og:url" content="http://yoursite.com/2018/03/09/flutter入坑/index.html">
 <meta property="og:site_name" content="Winnie&#39;blogs">
-<meta property="og:description" content="内存管理的思考方式内存管理的思想包括以下四点：  自己生成的对象，自己所持有  非自己生成的对象，自己也能持有  不再需要自己持有的对象时，要释放  非自己持有的对象 不能释放">
+<meta property="og:description" content="Flutter学习笔记昨天在同事的科普之下，我偶然间看到Flutter 这个东西，这个东西是什么呢，这个东西和RN有点像，就是可以在android和iOS跨平台的一个框架，用Dart语言写的，我喜欢这种不用XML来写的语言。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-08T08:04:02.852Z">
+<meta property="og:image" content="https://WinneCindy.github.io/images/flutter1.png">
+<meta property="og:image" content="https://WinneCindy.github.io/images/flutter1.png">
+<meta property="og:updated_time" content="2018-03-09T14:40:20.280Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="内存管理思想">
-<meta name="twitter:description" content="内存管理的思考方式内存管理的思想包括以下四点：  自己生成的对象，自己所持有  非自己生成的对象，自己也能持有  不再需要自己持有的对象时，要释放  非自己持有的对象 不能释放">
+<meta name="twitter:title" content="flutter入坑">
+<meta name="twitter:description" content="Flutter学习笔记昨天在同事的科普之下，我偶然间看到Flutter 这个东西，这个东西是什么呢，这个东西和RN有点像，就是可以在android和iOS跨平台的一个框架，用Dart语言写的，我喜欢这种不用XML来写的语言。">
+<meta name="twitter:image" content="https://WinneCindy.github.io/images/flutter1.png">
 
 
 
@@ -127,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/07/hmw/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/09/flutter入坑/"/>
 
 
 
 
 
-  <title>内存管理思想 | Winnie'blogs</title>
+  <title>flutter入坑 | Winnie'blogs</title>
   
 
 
@@ -260,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/07/hmw/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/09/flutter入坑/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Winnie">
@@ -277,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">内存管理思想</h1>
+          <h1 class="post-title" itemprop="name headline">flutter入坑</h1>
         
 
         <div class="post-meta">
@@ -289,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-07T16:49:26+08:00">
-                2018-03-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T21:55:19+08:00">
+                2018-03-09
               </time>
             
 
@@ -349,86 +352,28 @@
       
 
       
-        <h2 id="内存管理的思考方式"><a href="#内存管理的思考方式" class="headerlink" title="内存管理的思考方式"></a>内存管理的思考方式</h2><p>内存管理的思想包括以下四点：</p>
-<ol>
-<li><p>自己生成的对象，自己所持有</p>
-</li>
-<li><p>非自己生成的对象，自己也能持有</p>
-</li>
-<li><p>不再需要自己持有的对象时，要释放</p>
-</li>
-<li><p>非自己持有的对象 不能释放</p>
-</li>
-</ol>
+        <h2 id="Flutter学习笔记"><a href="#Flutter学习笔记" class="headerlink" title="Flutter学习笔记"></a>Flutter学习笔记</h2><p>昨天在同事的科普之下，我偶然间看到<a href="https://flutter.io/get-started/codelab/" target="_blank" rel="noopener">Flutter</a> 这个东西，这个东西是什么呢，这个东西和RN有点像，就是可以在android和iOS跨平台的一个框架，用Dart语言写的，我喜欢这种不用XML来写的语言。</p>
 <a id="more"></a>
-<h2 id="自己生成的对象自己持有"><a href="#自己生成的对象自己持有" class="headerlink" title="自己生成的对象自己持有"></a>自己生成的对象自己持有</h2><blockquote>
-<p>alloc 、new、copy、mutableCopy</p>
-</blockquote>
-<p>这些名称开头的方法名意味着自己生成的对象只有自己持有；上文中出现了一系列的自己这个词，可以将自己理解为“对象的使用环境”，也可以理解为编程人员“自身”。下面写出了自己生成并持有对象的源代码。我们在这里使用alloc方法：</p>
-<blockquote>
-<p>//自己生成对象并持有对象<br>id obj =[ [NSObject alloc] init];<br>//自己持有对象</p>
-</blockquote>
-<p>使用alloc类方法就能自己生成并持有对象。指向生成并持有对象的指针被赋给变量obj，另外，使用new类方法也可以生成并持有对象。和alloc时完全一致的</p>
-<blockquote>
-<p>//自己生成对象并持有对象<br>id obj =[NSObject new];<br>//自己持有对象</p>
-</blockquote>
-<p>copy方法利用基于NSCopying方法约定，由各类实现的copyWithZone：方法生成并持有对象副本。与copy方法类似，mutableCopy方法利用基于NSMutableCopying方法约定，由各类实现的mutableCopyWithZone：方法生成并持有对象的副本。 用这些方法生成的对象，虽然是对象的副本，但是和alloc、new一样，在”自己生成并持有对象“这点上没有发生改变；</p>
-<h2 id="非自己生成的对象，自己也能持有"><a href="#非自己生成的对象，自己也能持有" class="headerlink" title="非自己生成的对象，自己也能持有"></a>非自己生成的对象，自己也能持有</h2><p>用alloc／new／copy／mutableCopy以外的方法取得的对象，因为非自己生成并持有，所以自己不是该对象的持有者。看以下源代码：</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象的存在，但自己不持有对象</p>
-</blockquote>
-<p>上述代码中，NSmutableArray类对象被赋值给变量obj，但变量obj自己并不持有该对象。使用retain方法可以持有对象</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象的存在，但自己不持有对象<br>[obj retain];<br>//自己持有对象</p>
-</blockquote>
-<p>通过retain方法，非自己生成的对象跟用alloc／new／copy／mutableCopy方法生成并持有的对象一样，成为了自己所持有的。</p>
-<h2 id="不再需要自己持有的对象时-，要释放"><a href="#不再需要自己持有的对象时-，要释放" class="headerlink" title="不再需要自己持有的对象时 ，要释放"></a>不再需要自己持有的对象时 ，要释放</h2><p>自己持有的对象，一旦不在需要，持有者有义务释放该对象。释放使用release方法。</p>
-<blockquote>
-<p>//自己生成并持有对象<br>id obj = [[NSObject alloc] init];<br>//自己持有对象<br>[obj release];<br>//释放对象，指向 <em>对象的指针</em> 仍然被保留在变量obj中，貌似可以访问。但是 _对象_ 一经释放不可访问</p>
-</blockquote>
-<p>如此，用alloc方法由自己生成并持有的对象就通过release方法释放了。自己生成而非自己所持有的对象，若用retain方法变为自己持有，也同样可以用release方法释放。</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj = [NSMutableArray array];<br>//取得对象存在，但自己不持有对象<br>[obj retain];<br>//自己持有对象<br>[obj release];<br>//释放对象，对象  不可再被访问</p>
-</blockquote>
-<p>那么如果要用某个方法生成对象，并将其返还给该方法的调用方，那么它应该怎么操作呢，如下：</p>
-<blockquote>
-</blockquote>
-<pre><code>-( id ) allocObject
-{
-    //自己生成并持有对象
-    id obj = [[NSObject alloc ] init ];
-    //自己持有对象
-    return obj;
-}
-</code></pre><p>如上，原封不动返回用alloc方法生成并持有的对象，就能让调用方也持有该对象。</p>
-<blockquote>
-<p>//取得非自己生成并持有的对象<br>id obj1 = [obj0 allocObject];<br>//自己持有对象</p>
-</blockquote>
-<p>那么，如何像调用[NSMutableArray array] 方法使取得的对象存在，但自己不持有对象，又是如何实现的呢？如下：</p>
-<blockquote>
-</blockquote>
-<pre><code>-( id ) allocObject
-{
-    //自己生成并持有对象
-    id obj = [[NSObject alloc ] init ];
-    [obj autorelease];
-    //取得对象的存在，但是自己不持有对象。
-    return obj;
-}
-</code></pre><p>上述代码中，我使用了autorelease方法。用该方法，可以使取得的对象存在，但自己不持有对象。以后有时间我会详细介绍autorelease。</p>
-<blockquote>
-<p>id obj1 = [obj0 object];<br>//取得的对象存在，但自己不持有对象。</p>
-</blockquote>
-<p>当然也可以像前文中的NSMutableArray一样，通过retain 方法，将调用autorelease方法取得的对象变为自己持有。</p>
-<h2 id="无法释放非自己持有的对象"><a href="#无法释放非自己持有的对象" class="headerlink" title="无法释放非自己持有的对象"></a>无法释放非自己持有的对象</h2><p>对于由alloc／new／copy／mutableCopy 方法生成并持有的对象，或是retain方法持有的对象，由于持有者是自己，所以在不需要该对象的时候，需要将其释放。而由此以外所得到的对象绝对不能释放。如果在应用程序中释放了非自己所持有的对象就会造成崩溃。例如自己生成的并持有对象后，在释放完不再需要的对象之后再次释放。</p>
-<blockquote>
-<p>//自己生成并持有对象<br>id obj = [[NSObject alloc] init];<br>//自己持有对象<br>[objc release];<br>//对象已被释放<br>[obj release];<br>//释放之后再次释放已非自己持有的对象，应用程序崩溃<br>//崩溃情况：再度废弃一经废弃了的对象时崩溃   、 访问一经废弃的对象时崩溃；</p>
-</blockquote>
-<p>或者在“取得的对象存在，但自己不持有对象”时释放</p>
-<blockquote>
-<p>id obj1 = [obj0 object];<br>[obj1 release];<br>//释放了非自己持有的对象，这肯定会导致应用程序崩溃</p>
-</blockquote>
-<p>如这些例子所示，释放非自己持有的对象会造成程序崩溃。因此绝对不要去释放非自己持有的对象。</p>
+<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>我是在MAC环境下面做的Flutter，在这之前你需要一个Android Studio，所有你先可以把AS下载起来。很多学习教程上面会说先Clone一个Flutter，本人在尝试了之后，觉得没有这个必要。</p>
+<h4 id="首先在命令行下，进入用户目录"><a href="#首先在命令行下，进入用户目录" class="headerlink" title="首先在命令行下，进入用户目录"></a>首先在命令行下，进入用户目录</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd $HOME</span><br></pre></td></tr></table></figure>
+<h4 id="执行命令打开文件："><a href="#执行命令打开文件：" class="headerlink" title="执行命令打开文件："></a>执行命令打开文件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open -e .bash_profile</span><br></pre></td></tr></table></figure>
+<p>这个时候，有可能系统会报错，说您还没有这个文件，这个时候，你就直接创建一个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch babash_profile</span><br></pre></td></tr></table></figure></p>
+<h4 id="然后再做上面的操作"><a href="#然后再做上面的操作" class="headerlink" title="然后再做上面的操作;"></a>然后再做上面的操作;</h4><p>然后启动 Android Studio，搜索 Flutter 插件并单击 install，系统提示您安装 Dart 插件，点击 Yes 安装即可。</p>
+<p><em>提示：安装 Dart 插件可能会提示下载失败，多试几次。</em></p>
+<p>接着Android Studio - File - New - New Flutter Project。这个时候会跳出来一个用户交互界面<br><img src="https://WinneCindy.github.io/images/flutter1.png" alt="alt 新建Flutter项目" title="新建项目"></p>
+<h4 id="选择install-sdk。"><a href="#选择install-sdk。" class="headerlink" title="选择install sdk。"></a>选择install sdk。</h4><p><em>注意：这个时候需要选择这个SDK安装在哪个位置，要考虑清楚，我是user里面的</em></p>
+<h4 id="在命令行下，添加Flutter-Sdk安装的路径"><a href="#在命令行下，添加Flutter-Sdk安装的路径" class="headerlink" title="在命令行下，添加Flutter Sdk安装的路径"></a>在命令行下，添加Flutter Sdk安装的路径</h4><p>在刚刚打开着的.bash_profile的文件中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$&#123;PATH&#125;:/Users/huangmengwei/Flutter/flutter/bin:$PATH</span><br></pre></td></tr></table></figure></p>
+<h4 id="更新配置的环境变量"><a href="#更新配置的环境变量" class="headerlink" title="更新配置的环境变量"></a>更新配置的环境变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source .bash_profile</span><br></pre></td></tr></table></figure>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>终端直接输入flutterv</p>
+<h4 id="flutter-doctor"><a href="#flutter-doctor" class="headerlink" title="flutter doctor"></a>flutter doctor</h4><p>命令行输入<code>flutter doctor</code>，安装 Futter 剩余依赖项。</p>
+<p><em>注意：这个时候可能会出现以下的问题</em></p>
+<p><img src="https://WinneCindy.github.io/images/flutter1.png" alt="alt flutter doctor" title="flutter doctor"></p>
+<p>根据提示操作就行。</p>
+<p>到这为止，如果系统不报错了，环境什么的都已经搭完了。然后开始创建第一个项目。</p>
+<h4 id="第一个项目"><a href="#第一个项目" class="headerlink" title="第一个项目"></a>第一个项目</h4><p>在终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter create firstapp</span><br></pre></td></tr></table></figure></p>
+<p><em>注意：名字不能大写，不然报错</em></p>
+<p>然后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter run</span><br></pre></td></tr></table></figure></p>
+<h4 id="终了"><a href="#终了" class="headerlink" title="终了"></a>终了</h4><p>这样第一个Flutter就能好了。开心😄</p>
 
       
     </div>
@@ -459,8 +404,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/07/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2018/03/08/曾经现在/" rel="next" title="曾经现在">
+                <i class="fa fa-chevron-left"></i> 曾经现在
               </a>
             
           </div>
@@ -468,10 +413,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/08/基础/" rel="prev" title="基础">
-                基础 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -617,7 +558,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理的思考方式"><span class="nav-number">1.</span> <span class="nav-text">内存管理的思考方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自己生成的对象自己持有"><span class="nav-number">2.</span> <span class="nav-text">自己生成的对象自己持有</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非自己生成的对象，自己也能持有"><span class="nav-number">3.</span> <span class="nav-text">非自己生成的对象，自己也能持有</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不再需要自己持有的对象时-，要释放"><span class="nav-number">4.</span> <span class="nav-text">不再需要自己持有的对象时 ，要释放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无法释放非自己持有的对象"><span class="nav-number">5.</span> <span class="nav-text">无法释放非自己持有的对象</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Flutter学习笔记"><span class="nav-number">1.</span> <span class="nav-text">Flutter学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段"><span class="nav-number">1.1.</span> <span class="nav-text">准备阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先在命令行下，进入用户目录"><span class="nav-number">1.1.1.</span> <span class="nav-text">首先在命令行下，进入用户目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行命令打开文件："><span class="nav-number">1.1.2.</span> <span class="nav-text">执行命令打开文件：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#然后再做上面的操作"><span class="nav-number">1.1.3.</span> <span class="nav-text">然后再做上面的操作;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择install-sdk。"><span class="nav-number">1.1.4.</span> <span class="nav-text">选择install sdk。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在命令行下，添加Flutter-Sdk安装的路径"><span class="nav-number">1.1.5.</span> <span class="nav-text">在命令行下，添加Flutter Sdk安装的路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新配置的环境变量"><span class="nav-number">1.1.6.</span> <span class="nav-text">更新配置的环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证"><span class="nav-number">1.1.7.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flutter-doctor"><span class="nav-number">1.1.8.</span> <span class="nav-text">flutter doctor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一个项目"><span class="nav-number">1.1.9.</span> <span class="nav-text">第一个项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#终了"><span class="nav-number">1.1.10.</span> <span class="nav-text">终了</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
